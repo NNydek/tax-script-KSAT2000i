@@ -10,12 +10,44 @@ Gui, Show, w500 h500, I Love Automation
 
 GUI, Add, Button, x10 y10 w50 g19_to_21, 19-21
 GUI, Add, Button, x+10 w50 g20_to_21, 20-21
-GUI, Add, Button, x+10 w50 gOnly_20, 20
 GUI, Add, Button, x+10 w50 gOnly_21, 21
+GUI, Add, Button, x+260 w50 gWatch_Cursor, Watch Cursor
 
-Gui, Add, Checkbox, x11 vOne, 1
-Gui, Add, Checkbox, x+20 vTwo, 2
-Gui, Add, Checkbox, x+20 vThree, 3
+Gui, Add, Checkbox, x11 vFirst_Surname_Pos, Nazwisko Poz. 1
+Gui, Add, Checkbox, x+17 vSecond_Surname_Pos, Nazwisko Poz. 2
+Gui, Add, Checkbox, x+17 vThird_Surname_Pos, Nazwisko Poz. 3
+
+Gui, Add, Checkbox, x11 vFirst_Footnote, Przypis pierwszy
+Gui, Add, Checkbox, x+20 vSecond_Footnote, Przypis drugi
+
+Gui, Add, Checkbox, x11 vGWL_1, WL Poz. 1
+Gui, Add, Checkbox, x+20 vGWL_2, WL Poz. 2
+Gui, Add, Checkbox, x+20 vGWL_3, WL Poz. 3
+Gui, Add, Checkbox, x+20 vGWL_4, WL Poz. 4
+Gui, Add, Checkbox, x+20 vGWL_5, WL Poz. 5
+
+Gui, Add, Checkbox, x11 vGWL_6, WL Poz. 6
+Gui, Add, Checkbox, x+20 vGWL_7, WL Poz. 7
+Gui, Add, Checkbox, x+20 vGWL_8, WL Poz. 8
+Gui, Add, Checkbox, x+20 vGWL_9, WL Poz. 9
+Gui, Add, Checkbox, x+20 vGWL_10, WL Poz. 10
+
+Gui, Add, Checkbox, x11 vGPWL_1, PWL Poz. 1
+Gui, Add, Checkbox, x+13 vGPWL_2, PWL Poz. 2
+Gui, Add, Checkbox, x+13 vGPWL_3, PWL Poz. 3
+Gui, Add, Checkbox, x+13 vGPWL_4, PWL Poz. 4
+Gui, Add, Checkbox, x+13 vGPWL_5, PWL Poz. 5
+
+Gui, Add, Checkbox, x11 vGPWL_6, PWL Poz. 6
+Gui, Add, Checkbox, x+13 vGPWL_7, PWL Poz. 7
+Gui, Add, Checkbox, x+13 vGPWL_8, PWL Poz. 8
+Gui, Add, Checkbox, x+13 vGPWL_9, PWL Poz. 9
+Gui, Add, Checkbox, x+13 vGPWL_10, PWL Poz. 10
+return
+
+
+CoordMode, ToolTip, screen
+SetTimer, Watch_Cursor, 100 
 return
 
 ; Labels
@@ -23,91 +55,219 @@ return
 
 19_to_21:
 	Gui, Submit, NoHide
-	If One = 1
-		msgbox, you checked the first box
+	SurnamePos := check_surname_boxes(First_Surname_Pos, Second_Surname_Pos, Third_Surname_Pos)
+	FootnoteNum := check_footnote_boxes(First_Footnote, Second_Footnote)
+	WLPos := check_gwl_boxes(GWL_1, GWL_2, GWL_3, GWL_4, GWL_5, GWL_6, GWL_7, GWL_8, GWL_9, GWL_10)
+	PWLPos := check_gpwl_boxes(GPWL_1, GPWL_2, GPWL_3, GPWL_4, GPWL_5)
+	if (!SurnamePos || !FootnoteNum || !WLPos || !PWLPos)
+		return 
 	sleep, 1000
 	WinWait, I Love Automation
 	WinMinimize
 	BtnValue := 1
 	LoopVariable := 3
-	do_GMK_WL()
-	do_GMK_PWL(LoopVariable, BtnValue)
+	do_GMK_WL(FootnoteNum, WLPos, BtnValue)
+	do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos)
+	do_FAKTUROWANIE()
 return
 
 20_to_21:
+	Gui, Submit, NoHide
+	SurnamePos := check_surname_boxes(First_Surname_Pos, Second_Surname_Pos, Third_Surname_Pos)
+	FootnoteNum := check_footnote_boxes(First_Footnote, Second_Footnote)
+	WLPos := check_gwl_boxes(GWL_1, GWL_2, GWL_3, GWL_4, GWL_5, GWL_6, GWL_7, GWL_8, GWL_9, GWL_10)
+	PWLPos := check_gpwl_boxes(GPWL_1, GPWL_2, GPWL_3, GPWL_4, GPWL_5)
+	if (!SurnamePos || !FootnoteNum || !WLPos || !PWLPos)
+		return 
 	sleep, 1000
 	WinWait, I Love Automation
 	WinMinimize
 	BtnValue := 2
 	LoopVariable := 2
-	do_GMK_WL()
-	do_GMK_PWL(LoopVariable, BtnValue)
+	do_GMK_WL(FootnoteNum, WLPos, BtnValue)
+	do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos)
+	do_FAKTUROWANIE()
 return
 
-Only_20:
+Only_21:
+	Gui, Submit, NoHide
+	SurnamePos := check_surname_boxes(First_Surname_Pos, Second_Surname_Pos, Third_Surname_Pos)
+	FootnoteNum := check_footnote_boxes(First_Footnote, Second_Footnote)
+	WLPos := check_gwl_boxes(GWL_1, GWL_2, GWL_3, GWL_4, GWL_5, GWL_6, GWL_7, GWL_8, GWL_9, GWL_10)
+	PWLPos := check_gpwl_boxes(GPWL_1, GPWL_2, GPWL_3, GPWL_4, GPWL_5)
+	if (!SurnamePos || !FootnoteNum || !WLPos || !PWLPos)
+		return 
 	sleep, 1000
 	WinWait, I Love Automation
 	WinMinimize
 	BtnValue := 3
 	LoopVariable := 1
-	do_GMK_WL()
-	do_GMK_PWL(LoopVariable, BtnValue)
+	do_GMK_WL(FootnoteNum, WLPos, BtnValue)
+	do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos)
+	do_FAKTUROWANIE()
 return
 
-Only_21:
-	sleep, 1000
-	WinWait, I Love Automation
-	WinMinimize
-	BtnValue := 4
-	LoopVariable := 1
-	do_GMK_WL()
-	do_GMK_PWL(LoopVariable, BtnValue)
+Watch_Cursor:
+	while(1){
+		CoordMode, mouse, Screen
+		MouseGetPos, x_1, y_1, id_1, control_1 ; Coordinates are relative to the desktop (entire screen).
+
+		CoordMode, mouse, Window ; Synonymous with Relative and recommended for clarity.
+		MouseGetPos, x_2, y_2, id_2, control_2
+
+		CoordMode, mouse, Client ; Coordinates are relative to the active window's client area
+		MouseGetPos, x_3, y_3, id_3, control_3
+
+		ToolTip, Screen :`t`tx %x_1% y %y_1%`nWindow :`tx %x_2% y %y_2%`nClient :`t`tx %x_3% y %y_3%, % A_ScreenWidth-200, % A_ScreenHeight-100
+	}
 return
 
 GuiClose:
 	ExitApp
 return
 
-/*
-CoordMode, ToolTip, screen
-SetTimer, WatchCursor, 100 
-return
-
-WatchCursor:
-	CoordMode, mouse, Screen
-	MouseGetPos, x_1, y_1, id_1, control_1 ; Coordinates are relative to the desktop (entire screen).
-
-	CoordMode, mouse, Window ; Synonymous with Relative and recommended for clarity.
-	MouseGetPos, x_2, y_2, id_2, control_2
-
-	CoordMode, mouse, Client ; Coordinates are relative to the active window's client area
-	MouseGetPos, x_3, y_3, id_3, control_3
-
-	ToolTip, Screen :`t`tx %x_1% y %y_1%`nWindow :`tx %x_2% y %y_2%`nClient :`t`tx %x_3% y %y_3%, % A_ScreenWidth-200, % A_ScreenHeight-100
-return
-*/
 
 ; Functions
 ; -------------
 
-check_boxes(){
-	Gui, Submit, NoHide
-	If One = 1
-		msgbox, you checked the first box
-	If Two = 1
-		msgbox, you checked the first box
-	If Three = 1
-		msgbox, you checked the first box
+check_gwl_boxes(a, b, c, d, e, f, g, h, i, j){
+	if (!a && !b && !c && !d && !e && !f && !g && !h && !i && !j){
+		msgbox, Select at least 1 checkbox (wl)
+		return 0
+	} else if (a + b + c + d + e + f + g + h + i + j > 1){
+		msgbox, Too many arguments (wl)
+		return 0
+	} else if (a)
+		return 1
+	else if (b)
+		return 2
+	else if (c)
+		return 3
+	else if (d)
+		return 4
+	else if (e)
+		return 5
+	else if (f)
+		return 6
+	else if (g)
+		return 7
+	else if (h)
+		return 8
+	else if (i)
+		return 9
+	else if (j)
+		return 10
+	else
+		msgbox, Error (check_gpwl_boxes else)
+	return
 }
 
-do_GMK_WL(){
+check_gpwl_boxes(a, b, c, d, e){
+	if (!a && !b && !c && !d && !e){
+		msgbox, Select at least 1 checkbox (pwl)
+		return 0
+	} else if (a + b + c + d + e > 1){
+		msgbox, Too many arguments (pwl)
+		return 0
+	} else if (a)
+		return 1
+	else if (b)
+		return 2
+	else if (c)
+		return 3
+	else if (d)
+		return 4
+	else if (e)
+		return 5
+	else
+		msgbox, Error (check_gpwl_boxes else)
+	return
+}
+
+check_footnote_boxes(first, second){
+	if (!first && !second){
+		msgbox, Select at least 1 checkbox (footnote)
+		return 0
+	} else if (first + second > 1){
+		msgbox, Too many arguments (footnote)
+		return 0
+	} else if (first = 1)
+		return 1
+	else if (second = 1)
+		return 2
+	else
+		msgbox, Error (check_footnote_boxes else)
+	return
+}
+
+check_surname_boxes(1_pos, 2_pos, 3_pos){
+	if (!1_pos && !2_pos && !3_pos){
+		msgbox, Select at least 1 checkbox (surname)
+		return 0
+	} else if (1_pos + 2_pos + 3_pos > 1){
+		msgbox, Too many arguments (surname)
+		return 0
+	}
+	else if (1_pos = 1){
+		return 1
+	}
+	else if (2_pos = 1){
+		return 2
+	}
+	else if (3_pos = 1){
+		msgbox, WiP
+		return 3
+	} else
+		msgbox, Error (check_surname_boxes else)
+	return
+}
+
+do_GMK_WL(FootnoteNum, WLPos, BtnValue){
 	sleep, 500
 	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
 		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
 	CoordMode, mouse, Window
 	
 	sleep, 1000
-	MouseClick, left, 38, 577, 1 ; PRZYPIS 2
+	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
+	Sleep, 1000
+	Switch WLPos{
+	case 1:
+	case 2:
+		Send, {Down}
+	case 3:
+		Send, {Down 2}
+	case 4:
+		Send, {Down 3}
+	case 5:
+		Send, {Down 4}
+	case 6:
+		Send, {Down 5}
+	case 7:
+		Send, {Down 6}
+	case 8:
+		Send, {Down 7}
+	case 9:
+		Send, {Down 8}
+	case 10:
+		Send, {Down 9}
+	default:
+		msgbox, Error (do_GMK_WL Switch WLPos)
+	}
+
+	sleep, 1000
+	MouseClick, left, 748, 385, 1 ; EWIDENCJA
+	
+	Switch FootnoteNum{
+	case 1:
+		sleep, 1000
+		MouseClick, left, 38, 557, 1 ; PRZYPIS 1		
+	case 2:
+		sleep, 1000
+		MouseClick, left, 38, 577, 1 ; PRZYPIS 2
+	default:
+		msgbox, Error (do_GMK_WL if(FootnoteNum) else)
+	} 
 	sleep, 1000
 	MouseClick, left, 757, 617, 1 ; OPERACJE
 	sleep, 1000
@@ -116,71 +276,131 @@ do_GMK_WL(){
 	Send 31-12-2021
 	sleep, 1000
 	MouseClick, left, 501, 344, 1 ; ZAPISZ (data)
-	sleep, 1500
+	sleep, 2000
 	Send, {Enter} ; OK
 	sleep, 1000
 	MouseClick, left, 747, 301, 1 ; ZAPISZ
-	sleep, 1000
-	MouseClick, left, 38, 577, 1 ; PRZYPIS 2
-	sleep, 1000
-	MouseClick, left, 745, 365, 1 ; KARTOTEKA
-	sleep, 1000
-	MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
-	sleep, 1000
-	MouseClick, left, 650, 230, 1 ; ZAZNACZ1
-	sleep, 1000
-	MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-	sleep, 1000
-	MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
-	sleep, 1000
-	MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-	sleep, 1500
-	Send, {Enter} ; OK
-	sleep, 1000
-	MouseClick, left, 651, 249, 1 ; ZAZNACZ2
-	sleep, 1000
-	MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-	sleep, 1000
-	MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
-	sleep, 1000
-	MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-	sleep, 1500
-	Send, {Enter} ; OK
-	sleep, 1000
-	MouseClick, left, 777, 93, 1 ; WYJSCIE
-	sleep, 1000
-	MouseClick, left, 47, 559, 1 ; PRZYPIS 1
-	sleep, 1000
-	MouseClick, left, 745, 365, 1 ; KARTOTEKA
-	sleep, 1000
-	MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
-	sleep, 1000
-	MouseClick, left, 650, 230, 1 ; ZAZNACZ1
-	sleep, 1000
-	MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-	sleep, 1000
-	MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
-	sleep, 1000
-	MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-	sleep, 1500
-	Send, {Enter} ; OK
-	sleep, 1000
-	MouseClick, left, 777, 93, 1 ; WYJSCIE
+	if (BtnValue <= 2){
+		sleep, 1000
+		MouseClick, left, 38, 577, 1 ; PRZYPIS 2
+		sleep, 1000
+		MouseClick, left, 745, 365, 1 ; KARTOTEKA
+		sleep, 1000
+		MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
+		sleep, 1000
+		MouseClick, left, 651, 249, 1 ; ZAZNACZ2
+		sleep, 1000
+		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
+		sleep, 1000
+		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
+		sleep, 1000
+		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
+		sleep, 1000
+		Send, {Enter} ; OK
+		sleep, 1000
+		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
+		sleep, 1000
+		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
+		sleep, 1000
+		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
+		sleep, 1000
+		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
+		sleep, 2000
+		Send, {Enter} ; OK
+		sleep, 1000
+		MouseClick, left, 777, 93, 1 ; WYJSCIE
+	} 
+	if (BtnValue = 1){
+		sleep, 1000
+		MouseClick, left, 47, 559, 1 ; PRZYPIS 1
+		sleep, 1000
+		MouseClick, left, 745, 365, 1 ; KARTOTEKA
+		sleep, 1000
+		MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
+		sleep, 1000
+		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
+		sleep, 1000
+		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
+		sleep, 1000
+		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
+		sleep, 1000
+		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
+		sleep, 2000
+		Send, {Enter} ; OK
+		sleep, 1000
+		MouseClick, left, 777, 93, 1 ; WYJSCIE
+	} else if (BtnValue = 3){
+		Switch FootnoteNum{
+		case 1:
+			sleep, 1000
+			MouseClick, left, 38, 557, 1 ; PRZYPIS 1
+		case 2:
+			sleep, 1000
+			MouseClick, left, 38, 577, 1 ; PRZYPIS 2			
+		}
+		sleep, 1000
+		MouseClick, left, 745, 365, 1 ; KARTOTEKA
+		sleep, 1000
+		MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
+		sleep, 1000
+		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
+		sleep, 1000
+		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
+		sleep, 1000
+		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
+		sleep, 1000
+		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
+		sleep, 2000
+		Send, {Enter} ; OK
+		sleep, 1000
+		MouseClick, left, 777, 93, 1 ; WYJSCIE
+	} else
+		msgbox, Error (do_GMK_WL if(FootnoteNum2) else)
 	sleep, 1000
 	MouseClick, left, 777, 93, 1 ; WYJSCIE
 	return
 }
 
-do_GMK_PWL(LoopVariable, BtnValue){
+do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos){
 	sleep, 500
 	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
 		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
 	CoordMode, mouse, Window
 	
-	
+	sleep, 1000	
+	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
 	sleep, 1000
-	MouseClick, left, 136, 432, 1 ; NAZWISKO 2
+	Send, {Up 9}
+	Sleep, 350
+	Send, {Enter}
+	sleep, 1000
+	Switch PWLPos{
+	case 1:
+	case 2:
+		Send, {Down}
+	case 3:
+		Send, {Down 2}
+	case 4:
+		Send, {Down 3}
+	case 5:
+		Send, {Down 4}
+	default:
+		msgbox, Error (do_GMK_WL Switch WLPos)
+	}
+	sleep, 1000
+	MouseClick, left, 748, 385, 1 ; EWIDENCJA	
 
+	if(SurnamePos = 2){
+		sleep, 1000
+		MouseClick, left, 136, 432, 1 ; NAZWISKO 2
+		yPos := 433
+	} else if (SurnamePos = 3){
+		sleep, 1000
+		MouseClick, left, 136, 452, 1 ; NAZWISKO 3
+		yPos := 452
+	} else if (SurnamePos = 1){
+		yPos := 413
+	}
 	sleep, 1000
 	MouseClick, left, 47, 559, 1 ; PRZYPIS 1
 	sleep, 100
@@ -192,9 +412,16 @@ do_GMK_PWL(LoopVariable, BtnValue){
 	MouseClick, left, 38, 577, 1
 	sleep, 100
 	Send, ^v
-	sleep, 50
-	Send, {Tab}{Tab}01-01-2019{Tab}31-12-2021
-/*
+	sleep, 100
+	Switch BtnValue{
+	case 1: ; 19-21
+		Send, {Tab}{Tab}01-01-2019{Tab}31-12-2021
+	case 2: ; 20-21
+		Send, {Tab}{Tab}01-01-2020{Tab}31-12-2021
+	case 3: ; 21
+		Send, {Tab}{Tab}01-01-2021{Tab}31-12-2021
+	}
+	
 	sleep, 1000
 	MouseClick, left, 747, 301, 1 ; ZAPISZ
 
@@ -206,9 +433,9 @@ do_GMK_PWL(LoopVariable, BtnValue){
 
 	sleep, 1000
 	MouseClick, left, 697, 293, 1 ; ZAZNACZ
-*/
+
 	Loop, %LoopVariable%{
-/*		sleep, 1000
+		sleep, 1000
 		MouseClick, left, 715, 165, 1 ; OPERACJE
 
 		sleep, 1000
@@ -229,8 +456,7 @@ do_GMK_PWL(LoopVariable, BtnValue){
 		sleep, 1000
 		MouseClick, left, 363, 322, 1 ; Termin zaplaty/ termin raty/ poczatkowa data okresu
 		sleep, 100
-*/
-		Send, %BtnValue%
+
 		Switch BtnValue{
 		case 1: ; 19-21
 			if (A_Index = 1)
@@ -239,18 +465,16 @@ do_GMK_PWL(LoopVariable, BtnValue){
 				Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
 			else if (A_Index = 3)
 				Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
-			else ExitApp
+			else msgbox, Error (do_GMK_PWL Case1)
 		case 2: ; 20-21
 			if (A_Index = 1)
 				Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
 			else if (A_Index = 2)
 				Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
-			else ExitApp
-		case 3: ; 20
-			Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
-		case 4: ; 21
+			else msgbox, Error (do_GMK_PWL Case2)
+		case 3: ; 21
 			Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
-		default: ExitApp
+		default: msgbox, Error (do_GMK_PWL default)
 		}
 
 		sleep, 1000
@@ -265,9 +489,15 @@ do_GMK_PWL(LoopVariable, BtnValue){
 	sleep, 1000
 	MouseClick, left, 777, 93, 1 ; WYJSCIE
 
-	MouseClick, left, 51, 413, 1 ; KOD
+	sleep, 1000
+	MouseClick, left, 51, %yPos%, 1 ; KOD
 	Send, ^c
-	return
+
+	sleep, 1000
+	MouseClick, left, 92, 224, 1 ; NR UMOWY
+	sleep, 50
+	Send {F7}
+return
 }
 
 do_FAKTUROWANIE(){
@@ -276,7 +506,14 @@ do_FAKTUROWANIE(){
 		WinActivate FAKTUROWANIE
 	CoordMode, mouse, Window
 
+	sleep, 1000
+	MouseClick, left, 94, 414, 1 ; KOD
 	sleep, 200
+	Send, ^v
+	sleep, 1000
+	Send, {F8}
+	
+	sleep, 2000
 	MouseClick, left, 757, 218, 1 ; Zaznacz1
 
 	sleep, 200
@@ -304,9 +541,14 @@ do_FAKTUROWANIE(){
 	Send, {Enter}
 	sleep, 4000
 	Send, {Enter}
-	sleep, 4000
+	sleep, 3000
 	Send, {Enter}
-	return
+	
+	sleep, 4000
+	MouseClick, left, 97, 217, 1 ; NR REJESTRU
+	sleep, 200
+	Send {F7}
+return
 }
 
 clear(){
@@ -345,7 +587,7 @@ return
 
 ;GMK WŁ
 >+g::
-	do_GMK_WL()
+	;do_GMK_WL(FootnoteNum)
 return
 
 ;GMK PWŁ
