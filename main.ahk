@@ -69,6 +69,8 @@ return
 	do_GMK_WL(FootnoteNum, WLPos, BtnValue)
 	do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos)
 	do_FAKTUROWANIE()
+	update_excel()
+	paste_new_user_code()
 return
 
 20_to_21:
@@ -87,6 +89,8 @@ return
 	do_GMK_WL(FootnoteNum, WLPos, BtnValue)
 	do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos)
 	do_FAKTUROWANIE()
+	update_excel()
+	paste_new_user_code()
 return
 
 Only_21:
@@ -105,6 +109,8 @@ Only_21:
 	do_GMK_WL(FootnoteNum, WLPos, BtnValue)
 	do_GMK_PWL(LoopVariable, BtnValue, SurnamePos, PWLPos)
 	do_FAKTUROWANIE()
+	update_excel()
+	paste_new_user_code()
 return
 
 Watch_Cursor:
@@ -354,7 +360,7 @@ do_GMK_WL(FootnoteNum, WLPos, BtnValue){
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
-	} else
+	} else if (BtnValue != 2)
 		msgbox, Error (do_GMK_WL if(FootnoteNum2) else)
 	sleep, 1000
 	MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -551,6 +557,46 @@ do_FAKTUROWANIE(){
 return
 }
 
+update_excel(){
+	oExcel := ComObjCreate("Excel.Application") ; create Excel Application object
+	oExcel.Workbooks.Add ; create a new workbook (oWorkbook := oExcel.Workbooks.Add)
+	
+	FilePath := "d:\Users\umpawy01\Desktop\Bruttowanie.xlsx" ; example path
+	oWorkbook := ComObjGet(FilePath) ; access Workbook object
+	
+	column := 65 ; ASCII - A
+	row := 2
+	
+	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
+		c1 := Chr(65) ; ASCII to String - A
+		c2 := Chr(67) ; C
+		cell = %c1%%row%:%c2%%row% ; e.g. A2
+		if(oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex = 43 || oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex = 48){
+			row++
+			continue
+		}
+		oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex := 43 ; green
+		sleep, 50
+		row++
+		nextCode = %c1%%row%
+		clipboard := Format("{:.0f}", oWorkbook.Sheets(1).Range(nextCode).Value)
+		Send, ^c
+		break
+	}
+	return
+}
+
+paste_new_user_code(){
+	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
+		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
+	MouseClick, left, 51, 413, 1 ; KOD
+	sleep, 1000
+	Send, ^v
+	sleep, 500
+	Send, {F8}
+	return
+}
+
 clear(){
 	sleep, 500
 	if WinActive("GOSPODARKA MIENIEM KOMUNALNYM") {	
@@ -572,8 +618,37 @@ clear(){
 }
 
 testing(){
-	WinWait, I Love Automation
-	WinMinimize
+	oExcel := ComObjCreate("Excel.Application") ; create Excel Application object
+	oExcel.Workbooks.Add ; create a new workbook (oWorkbook := oExcel.Workbooks.Add)
+	
+	FilePath := "d:\Users\umpawy01\Desktop\Bruttowanie.xlsx" ; example path
+	oWorkbook := ComObjGet(FilePath) ; access Workbook object
+	
+	column := 65 ; ASCII - A
+	row := 2
+	
+	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
+		c1 := Chr(65) ; ASCII to String - A
+		c2 := Chr(67) ; C
+		cell = %c1%%row%:%c2%%row% ; e.g. A2
+		if(oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex = 43 || oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex = 48){
+			row++
+			continue
+		}
+		oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex := 43 ; green
+		sleep, 50
+		row++
+		nextCode = %c1%%row%
+		clipboard := Format("{:.0f}", oWorkbook.Sheets(1).Range(nextCode).Value)
+		;msgbox % SubStr(String, 1, InStr(userCode, "."))
+		;msgbox % SubStr(String, InStr(userCode, "."))
+		
+		;string := "asdfasdfasdfasdf - something is written here"
+		;msgbox % SubStr(String, 1, InStr(string, "-")) 
+		;msgbox % SubStr(String, InStr(string, "-"))
+		
+		break
+	}
 	return
 }
 
@@ -583,6 +658,7 @@ testing(){
 ;Test
 >+o::
 	testing()
+	;oExcel := ComObjCreate("Excel.Application") ; create Excel Application object
 return
 
 ;GMK WŁ
