@@ -74,12 +74,13 @@ Run:
 		areParametersRight := check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum)
 		if(!areParametersRight)
 			return
-		;isAlreadyDone(PWLPos)
-		;do_GMK_WL(FootnoteNum, WLPos, DateSelect)
+		isAlreadyDone(PWLPos)
+		do_GMK_WL(FootnoteNum, WLPos, DateSelect)
 		do_GMK_PWL(DateSelect, SurnamePos, PWLPos)
 		do_FAKTUROWANIE()
 		update_excel()
 		paste_new_user_code()
+		;msgbox, stop
 	}
 return
 
@@ -272,6 +273,7 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
 		sleep, 1000
+		check_popup(479, 500)
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
@@ -281,7 +283,8 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 2000
+		sleep, 1000
+		check_popup(479, 500)
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -301,7 +304,8 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 2000
+		sleep, 1000
+		check_popup(479, 500)
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -326,7 +330,8 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 2000
+		sleep, 1000
+		check_popup(479, 500)
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -455,7 +460,8 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 
 		sleep, 1000
 		MouseClick, left, 608, 127, 1 ; Generuj Dokument
-		sleep, 1500
+		check_popup(480, 490)
+		sleep, 1000
 		Send, {Enter}
 	}
 
@@ -513,9 +519,12 @@ do_FAKTUROWANIE(){
 	
 	sleep, 1000
 	MouseClick, left, 624, 424, 1 ; Zatwierdź
-	sleep, 4000
+	
+	check_popup(480, 490)
+	sleep, 1000
 	Send, {Enter}
-	sleep, 4000
+	check_popup(480, 490)
+	sleep, 1000
 	Send, {Enter}
 	sleep, 3000
 	Send, {Enter}
@@ -595,6 +604,7 @@ isAlreadyDone(PWLPos){
 	Send, {Up 9}
 	Sleep, 350
 	Send, {Enter}
+	sleep, 500
 	Switch PWLPos{
 	case 1:
 	case 2:
@@ -622,6 +632,12 @@ isAlreadyDone(PWLPos){
 		Send, {Enter}
 	return
 }
+;389, 133 FAKTUROWANIE
+;474, 487
+;411, 171
+;381, 520
+;384, 512
+;591, 433
 
 check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum){
 	oExcel := ComObjCreate("Excel.Application") ; create Excel Application object
@@ -636,7 +652,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum){
 	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
 		c1 := Chr(68) ; ASCII to String - D
 		c2 := Chr(71) ; 67 - C    71 - G
-		cell = %c1%%row%:%c2%%row% ; e.g. A2
+		cell = %c1%%row%:%c2%%row% ; e.g. D2:G2
 		if(oWorkbook.Sheets(1).Range(cell).Interior.Color != 16777215.0000000){
 			row++
 			continue
@@ -671,7 +687,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum){
 	return 1
 }
 
-testing(){
+check_new_code(){
 	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
 		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
 
@@ -701,65 +717,46 @@ testing(){
 	}
 	return
 }
-/*
-testing2(){
-	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
-		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
 
-	oExcel := ComObjCreate("Excel.Application") ; create Excel Application object
-	oExcel.Workbooks.Add ; create a new workbook (oWorkbook := oExcel.Workbooks.Add)
-	
-	FilePath := "d:\Users\umpawy01\Desktop\Bruttowanie.xlsx" ; example path
-	oWorkbook := ComObjGet(FilePath) ; access Workbook object
-	
-	column := 65 ; ASCII - A
-	row := 2
-	
-	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
-		c1 := Chr(65) ; ASCII to String - A
-		c2 := Chr(67) ; C
-		cell = %c1%%row%:%c2%%row% ; e.g. A2
-		if(oWorkbook.Sheets(1).Range(cell).Interior.Color != 16777215.0000000){
-			row++
-			continue
-		}
-		sleep, 50
-		row++
-		msgbox % cell
-		clipboard := Format("{:.0f}", oWorkbook.Sheets(1).Range(cell).Value)
-		break
+check_popup(getPixelX, getPixelY){
+	Loop, 15{
+		sleep 1000
+		PixelGetColor, color, getPixelX, getPixelY 
+		if(color = 0x0000FF || color = 0xD1B499 || color = 0x00FFFF || color = 0xFF0000 || color = 0x7F7F00)
+			return 1
 	}
-	return
+	msgbox, Something went wrong (check_popup)
+	return 0
 }
-*/
+
+testing(){
+
+}
+
 ; Hotkeys
 ; -------------
 
-;Test
->+o::
-	update_excel()
+
+>+o:: ;Test
+	msgbox, pause
 return
 
-=::
+=:: ;Check new code
 	clear()
-	testing()
+	check_new_code()
 	paste_new_user_code()
-	;testing2()
 return
 
-;CLEAR
->+c::
+>+c:: ;CLEAR
 	clear()
 return
 
-;Ewidencja
-\::
+\:: ;Ewidencja
 	sleep, 250
 	MouseClick, left, 748, 388, 1
 return
 
-;Konto Kontrahenta
-]::
+]:: ;Konto Kontrahenta
 	sleep, 250
 	MouseClick, left, 747, 427, 1
 
@@ -767,8 +764,7 @@ return
 	MouseClick, left, 441, 394, 1
 return
 
-;Wyjscie z kontrahenta
-[::
+[:: ;Wyjscie z kontrahenta
 	sleep, 250
 	MouseClick, left, 797, 94, 1
 	
