@@ -258,8 +258,13 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 	sleep, 1000
 	MouseClick, left, 747, 301, 1 ; ZAPISZ
 	if (DateSelect >= 2){
-		sleep, 1000
-		MouseClick, left, 38, 577, 1 ; PRZYPIS 2
+		if(FootnoteNum = 2){
+			sleep, 1000
+			MouseClick, left, 38, 577, 1 ; PRZYPIS 2
+		} else{
+			sleep, 1000
+			MouseClick, left, 38, 557, 1 ; PRZYPIS 1
+		}
 		sleep, 1000
 		MouseClick, left, 745, 365, 1 ; KARTOTEKA
 		sleep, 1000
@@ -273,7 +278,7 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
 		sleep, 1000
-		check_popup(479, 500)
+		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
@@ -284,7 +289,7 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
 		sleep, 1000
-		check_popup(479, 500)
+		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -305,7 +310,7 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
 		sleep, 1000
-		check_popup(479, 500)
+		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -331,7 +336,7 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
 		sleep, 1000
-		check_popup(479, 500)
+		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 777, 93, 1 ; WYJSCIE
@@ -423,46 +428,74 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 		MouseClick, left, 410, 249, 1 ; GENERUJ FAKTURY/DOKUMENTY DLA ZAZN.
 		sleep, 1500
 		Send, {Enter} ; OK
+		sleep, 200
+		PixelGetColor, color, 420, 290
+		if(color = 0x000000)
+			msgbox, dead!
+		isDead := is_dead(388, 512)
+		if(isDead){
+			sleep, 1000
+			Send, {Enter}
+			sleep, 1000
+			MouseClick, left, 715, 165, 1 ; OPERACJE
+			sleep, 1000
+			MouseClick, left, 410, 214, 1 ; Generj fakture/dokument
+			sleep, 1000
+			Send, {Enter}
+		} else{
+			sleep, 1000
+			MouseClick, left, 537, 119, 1 ; RODZAJ DOK. FINANSOWEGO
+			sleep, 1500
+			Send, {Enter} ; OK
 
-		sleep, 1000
-		MouseClick, left, 537, 119, 1 ; RODZAJ DOK. FINANSOWEGO
-		sleep, 1500
-		Send, {Enter} ; OK
+			sleep, 1000
+			MouseClick, left, 539, 140, 1 ; REJESTR VAT
+			sleep, 1500
+			Send, {Enter} ; OK
+			
+			sleep, 1000
+			MouseClick, left, 363, 322, 1 ; Termin zaplaty/ termin raty/ poczatkowa data okresu
+			sleep, 100
 
-		sleep, 1000
-		MouseClick, left, 539, 140, 1 ; REJESTR VAT
-		sleep, 1500
-		Send, {Enter} ; OK
-		
-		sleep, 1000
-		MouseClick, left, 363, 322, 1 ; Termin zaplaty/ termin raty/ poczatkowa data okresu
-		sleep, 100
-
-		Switch DateSelect{
-		case 3: ; 19-21
-			if (A_Index = 1)
-				Send, 29-02-2020{Tab}29-02-2020{Tab}01-01-2019
-			else if (A_Index = 2)
-				Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
-			else if (A_Index = 3)
+			Switch DateSelect{
+			case 3: ; 19-21
+				if (A_Index = 1)
+					Send, 29-02-2020{Tab}29-02-2020{Tab}01-01-2019
+				else if (A_Index = 2)
+					Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
+				else if (A_Index = 3)
+					Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
+				else msgbox, Error (do_GMK_PWL Case1)
+			case 2: ; 20-21
+				if (A_Index = 1)
+					Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
+				else if (A_Index = 2)
+					Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
+				else msgbox, Error (do_GMK_PWL Case2)
+			case 1: ; 21
 				Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
-			else msgbox, Error (do_GMK_PWL Case1)
-		case 2: ; 20-21
-			if (A_Index = 1)
-				Send, 30-06-2020{Tab}30-06-2020{Tab}01-01-2020
-			else if (A_Index = 2)
-				Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
-			else msgbox, Error (do_GMK_PWL Case2)
-		case 1: ; 21
-			Send, 31-03-2021{Tab}31-03-2021{Tab}01-01-2021
-		default: msgbox, Error (do_GMK_PWL default)
+			default: 
+				msgbox, Error (do_GMK_PWL default)
+			}
 		}
-
-		sleep, 1000
-		MouseClick, left, 608, 127, 1 ; Generuj Dokument
-		check_popup(480, 490)
-		sleep, 1000
-		Send, {Enter}
+		if(isDead){
+			check_popup(480, 485) ;480 490
+			sleep, 1000
+			send, {Enter}
+			check_popup(480, 475) ;480 490
+			sleep, 500
+			send, {Enter}
+			check_popup(480, 438) ;480 490
+			sleep, 500
+			send, {Enter}
+		} else{
+			sleep, 1000
+			MouseClick, left, 608, 127, 1 ; Generuj Dokument
+			
+			check_popup(480, 470) ;480 490
+			sleep, 1000
+			Send, {Enter}
+		}
 	}
 
 	sleep, 1000
@@ -619,7 +652,7 @@ isAlreadyDone(PWLPos){
 		msgbox, Error (isAlreadyDone Switch PWLPos)
 	}
 	sleep 1000
-	MouseClick, left, 243, 558, 1 ; DATA DO
+	MouseClick, left, 290, 558, 1 ; KOD(2)
 	sleep 1000
 	MouseMove, 341, 523
 	PixelGetColor, color, 341, 523 ; 0x0000FF RED
@@ -657,24 +690,28 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum){
 			row++
 			continue
 		}
+		sleep, 100
 		newCell = %c1%%row%
 		PWL = %PWLPos%
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != PWL){
 			msgbox, WRONG PWL
 			return 0
 		}
+		sleep, 100
 		newCell = E%row%
 		SRNPos = %SurnamePos%
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != SRNPos){
 			msgbox, WRONG SURNAME
 			return 0
 		}
+		sleep, 100
 		newCell = F%row%
 		WL = %WLPos%
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != WL){
 			msgbox, WRONG WL
 			return 0
 		}
+		sleep, 100
 		newCell = G%row%
 		FNPos = %FootnoteNum%
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != FNPos){
@@ -716,6 +753,15 @@ check_new_code(){
 		break
 	}
 	return
+}
+
+is_dead(getPixelX, getPixelY){
+	sleep 1000
+	PixelGetColor, color, getPixelX, getPixelY 
+	if(color = 0x0000FF)
+		return 1
+	else
+		return 0
 }
 
 check_popup(getPixelX, getPixelY){
