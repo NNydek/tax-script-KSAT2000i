@@ -1,7 +1,6 @@
 >+o:: ;Test
-	msgbox, asdff
-	qwerty := "Hej"
-	testing(qwerty)
+	;testing()
+	isMunicipality()
 return
 
 Numpad1:: ;19-21
@@ -34,6 +33,10 @@ Numpad8:: ;Check new code
 	paste_new_user_code()
 	sleep, 1000
 	SendInput, ]
+	check_popup(221, 189)
+	Send, {Down 20}
+	sleep, 350
+	Send, {Enter}
 return
 
 >+p:: ;Pause

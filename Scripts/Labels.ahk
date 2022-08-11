@@ -1,17 +1,23 @@
 Run:
 	Gui, Submit, NoHide
-	DateSelect := check_date_boxes(19_to_21, 20_to_21, 21_only)
-	PWLPos := check_gpwl_boxes(PWL_1, PWL_2, PWL_3, PWL_4, PWL_5)
-	SurnamePos := check_surname_boxes(1_Surname_Pos, 2_Surname_Pos, 3_Surname_Pos)
-	WLPos := check_gwl_boxes(WL_1, WL_2, WL_3, WL_4, WL_5, WL_6, WL_7, WL_8, WL_9, WL_10)
-	FootnoteNum := check_footnote_boxes(1_footnote, 2_footnote)
+	dateArr := [1_dates, 2_dates, 3_dates]
+	pwlArr := [PWL_1, PWL_2, PWL_3, PWL_4, PWL_5, PWL_6, PWL_7, PWL_8, PWL_9, PWL_10]
+	surnameArr := [1_Surname_Pos, 2_Surname_Pos, 3_Surname_Pos]
+	wlArr := [WL_1, WL_2, WL_3, WL_4, WL_5, WL_6, WL_7, WL_8, WL_9, WL_10, WL_11, WL_12, WL_13, WL_14, WL_15]
+	footnoteArr := [1_footnote, 2_footnote]
+	
+	DateSelect := check_date_boxes(dateArr)
+	PWLPos := check_gpwl_boxes(pwlArr)
+	SurnamePos := check_surname_boxes(surnameArr)
+	WLPos := check_gwl_boxes(wlArr)
+	FootnoteNum := check_footnote_boxes(footnoteArr)
 	if (!DateSelect || !SurnamePos || !FootnoteNum || !WLPos || !PWLPos)
 		return 
 	sleep, 1000
 	WinWait, I Love Automation
 	WinMinimize
 	while(1){
-		areParametersRight := check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum)
+		areParametersRight := check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect)
 		if(!areParametersRight){
 			WinWait, I Love Automation
 			WinActivate, I Love Automation

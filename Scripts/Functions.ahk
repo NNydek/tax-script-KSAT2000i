@@ -1,197 +1,10 @@
-testing(asdf){
-	msgbox, testing %asdf%
-	return
-}
-
-check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum){
-	sleep, 200
-	oExcel := ComObjActive("Excel.Application")
-	
-	FilePath := "d:\Users\umpawy01\Desktop\Bruttowanie.xlsx"
-	oWorkbook := ComObjGet(FilePath) ; access Workbook object
-	
-	column := 68 ; ASCII - D
-	row := 2
-
-	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
-		c1 := Chr(68) ; ASCII to String - D
-		c2 := Chr(71) ; 67 - C    71 - G
-		cell = %c1%%row%:%c2%%row% ; e.g. D2:G2
-		if(oWorkbook.Sheets(1).Range(cell).Interior.Color != 16777215.0000000){
-			row++
-			continue
-		}
-		sleep, 100
-		newCell = %c1%%row%
-		PWL = %PWLPos%
-		sleep, 100
-		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != PWL){
-			msgbox,,, Wrong PWL, 2
-			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
-			GuiControl,, PWL_%correctValue%, 1
-			return 0
-		}
-		sleep, 100
-		newCell = E%row%
-		SRNPos = %SurnamePos%
-		sleep, 100
-		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != SRNPos){
-			msgbox,,, Wrong SURNAME, 2
-			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
-			GuiControl,, %correctValue%_Surname_Pos, 1			
-			return 0
-		}
-		sleep, 100
-		newCell = F%row%
-		WL = %WLPos%
-		sleep, 100
-		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != WL || WL = PWL){
-			msgbox,,, Wrong WL, 2
-			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
-			GuiControl,, WL_%correctValue%, 1			
-			return 0
-		}
-		sleep, 100
-		newCell = G%row%
-		FNPos = %FootnoteNum%
-		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != FNPos){
-			msgbox,,, Wrong FOOTNOTE, 2
-			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
-			GuiControl,, %correctValue%_footnote, 1
-			return 0
-		}
-		sleep, 50
-		break
+testing(){
+	sleep, 100
+	Send, ^c
+	sleep, 100
+	if (clipboard != "G-PW" . Chr(0321) . "FNPN"){
+		msgbox, RODZAJ NALEZNOSCI !!!
 	}
-	return 1
-}
-
-isAlreadyDone(PWLPos){
-	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
-		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
-	sleep, 1000
-	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
-	sleep, 1000
-	Send, {Up 9}
-	Sleep, 1000
-	Send, {Enter}
-	sleep, 500
-	Switch PWLPos{
-	case 1:
-	case 2:
-		Send, {Down}
-	case 3:
-		Send, {Down 2}
-	case 4:
-		Send, {Down 3}
-	case 5:
-		Send, {Down 4}
-	default:
-		msgbox, Error (isAlreadyDone Switch PWLPos)
-	}
-	sleep 1000
-	MouseClick, left, 290, 558, 1 ; KOD(2)
-	sleep 1000
-	PixelGetColor, color, 341, 523 ; 0x0000FF RED
-	if (color != 0x0000FF){
-		Send, {Enter}
-		clear()
-		update_excel()
-		paste_new_user_code()
-	} else
-		Send, {Enter}
-	return
-}
-
-check_date_boxes(19_to_21, 20_to_21, 21_only){
-	if (!19_to_21 && !20_to_21 && !21_only){
-		msgbox, Select at least 1 checkbox (date)
-		return 0
-	} else if (21_only)
-		return 1
-	else if (20_to_21)
-		return 2
-	else if (19_to_21)
-		return 3
-	else
-		msgbox, Error (check_date_boxes else)
-	return
-}
-
-check_gwl_boxes(a, b, c, d, e, f, g, h, i, j){
-	if (!a && !b && !c && !d && !e && !f && !g && !h && !i && !j){
-		msgbox, Select at least 1 checkbox (wl)
-		return 0
-	} else if (a)
-		return 1
-	else if (b)
-		return 2
-	else if (c)
-		return 3
-	else if (d)
-		return 4
-	else if (e)
-		return 5
-	else if (f)
-		return 6
-	else if (g)
-		return 7
-	else if (h)
-		return 8
-	else if (i)
-		return 9
-	else if (j)
-		return 10
-	else
-		msgbox, Error (check_gpwl_boxes else)
-	return
-}
-
-check_gpwl_boxes(a, b, c, d, e){
-	if (!a && !b && !c && !d && !e){
-		msgbox, Select at least 1 checkbox (pwl)
-		return 0
-	} else if (a)
-		return 1
-	else if (b)
-		return 2
-	else if (c)
-		return 3
-	else if (d)
-		return 4
-	else if (e)
-		return 5
-	else
-		msgbox, Error (check_gpwl_boxes else)
-	return
-}
-
-check_footnote_boxes(first, second){
-	if (!first && !second){
-		msgbox, Select at least 1 checkbox (przypis)
-		return 0
-	} else if (first = 1)
-		return 1
-	else if (second = 1)
-		return 2
-	else
-		msgbox, Error (check_footnote_boxes else)
-	return
-}
-
-check_surname_boxes(1_pos, 2_pos, 3_pos){
-	if (!1_pos && !2_pos && !3_pos){
-		msgbox, Select at least 1 checkbox (nazwisko)
-		return 0
-	} else if (1_pos = 1)
-		return 1
-	else if (2_pos = 1)
-		return 2
-	else if (3_pos = 1){
-		msgbox, WiP
-		return 3
-	} else
-		msgbox, Error (check_surname_boxes else)
 	return
 }
 
@@ -204,30 +17,12 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 	sleep, 1000
 	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
 	Sleep, 1000
-	Switch WLPos{
-	case 1:
-	case 2:
+	Loop{
+		if(A_Index = 1)
+			continue
 		Send, {Down}
-	case 3:
-		Send, {Down 2}
-	case 4:
-		Send, {Down 3}
-	case 5:
-		Send, {Down 4}
-	case 6:
-		Send, {Down 5}
-	case 7:
-		Send, {Down 6}
-	case 8:
-		Send, {Down 7}
-	case 9:
-		Send, {Down 8}
-	case 10:
-		Send, {Down 9}
-	default:
-		msgbox, Error (do_GMK_WL Switch WLPos)
-	}
-
+	} until (A_Index = WLPos)
+	isMunicipality()
 	sleep, 1000
 	MouseClick, left, 748, 385, 1 ; EWIDENCJA
 	
@@ -297,8 +92,13 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		MouseClick, left, 745, 365, 1 ; KARTOTEKA
 		sleep, 1000
 		MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
-		sleep, 1000
-		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
+		if(FootnoteNum = 2){
+			sleep, 1000
+			MouseClick, left, 650, 230, 1 ; ZAZNACZ1
+		} else{
+			sleep, 1000
+			MouseClick, left, 650, 270, 1 ; ZAZNACZ3
+		}
 		sleep, 1000
 		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
 		sleep, 1000
@@ -352,37 +152,25 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 	sleep, 1000	
 	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
 	sleep, 1000
-	Send, {Up 9}
+	Send, {Up 15}
 	Sleep, 350
 	Send, {Enter}
 	sleep, 1000
-	Switch PWLPos{
-	case 1:
-	case 2:
+	Loop {
+		if(A_Index = 1)
+			continue
 		Send, {Down}
-	case 3:
-		Send, {Down 2}
-	case 4:
-		Send, {Down 3}
-	case 5:
-		Send, {Down 4}
-	default:
-		msgbox, Error (do_GMK_WL Switch WLPos)
-	}
+	} until (A_Index = PWLPos)
+
 	sleep, 1000
 	MouseClick, left, 748, 385, 1 ; EWIDENCJA	
-
-	if(SurnamePos = 2){
-		sleep, 1000
-		MouseClick, left, 136, 432, 1 ; NAZWISKO 2
-		yPos := 433
-	} else if (SurnamePos = 3){
-		sleep, 1000
-		MouseClick, left, 136, 452, 1 ; NAZWISKO 3
-		yPos := 452
-	} else if (SurnamePos = 1){
-		yPos := 413
-	}
+	sleep, 1000
+	MouseClick, left, 125, 413, 1 ; NAZWISKO 1
+	Loop{
+		if(A_Index = 1)
+			continue
+		Send, {Down}
+	} until (A_Index = SurnamePos)
 	sleep, 1000
 	MouseClick, left, 47, 559, 1 ; PRZYPIS 1
 	sleep, 100
@@ -426,7 +214,6 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 
 		isDead := is_dead(388, 512)
 		if(isDead){
-			MsgBox, if isDead true
 			sleep, 1000
 			Send, {Enter}
 			sleep, 1000
@@ -501,7 +288,12 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 	MouseClick, left, 777, 93, 1 ; WYJSCIE
 
 	sleep, 1000
-	MouseClick, left, 51, %yPos%, 1 ; KOD
+	MouseClick, left, 32, 414, 1 ; KOD 1
+	Loop{
+		if(A_Index = 1)
+			continue
+		Send, {Down}
+	} until (A_Index = SurnamePos)
 	Send, ^c
 
 	sleep, 1000
@@ -608,36 +400,6 @@ paste_new_user_code(){
 	return
 }
 
-check_new_code(){
-	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
-		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
-
-	oExcel := ComObjCreate("Excel.Application")
-	
-	FilePath := "d:\Users\umpawy01\Desktop\Bruttowanie.xlsx"
-	oWorkbook := ComObjGet(FilePath) ; access Workbook object
-	
-	column := 65 ; ASCII - A
-	row := 2
-	
-	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
-		c1 := Chr(65) ; ASCII to String - A
-		c2 := Chr(67) ; C
-		cell = %c1%%row%:%c2%%row% ; e.g. A2
-		if(oWorkbook.Sheets(1).Range(cell).Interior.Color != 16777215.0000000){
-			row++
-			continue
-		}
-		oWorkbook.Sheets(1).Range(cell).Interior.ColorIndex := 6 ; yellow
-		sleep, 50
-		row++
-		nextCode = %c1%%row%
-		clipboard := Format("{:.0f}", oWorkbook.Sheets(1).Range(nextCode).Value)
-		break
-	}
-	return
-}
-
 is_dead(getPixelX, getPixelY){
 	sleep 1000
 	PixelGetColor, color, getPixelX, getPixelY 
@@ -645,17 +407,6 @@ is_dead(getPixelX, getPixelY){
 		return 1
 	else
 		return 0
-}
-
-check_popup(getPixelX, getPixelY){
-	Loop, 15{
-		sleep 1000
-		PixelGetColor, color, getPixelX, getPixelY 
-		if(color = 0x0000FF || color = 0xD1B499 || color = 0x00FFFF || color = 0xFF0000 || color = 0x7F7F00)
-			return 1
-	}
-	msgbox, Something went wrong (check_popup)
-	return 0
 }
 
 group_people(sheet){

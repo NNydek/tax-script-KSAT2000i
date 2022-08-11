@@ -21,6 +21,7 @@ return
 ; Functions
 ; -------------
 
+#Include Scripts\Functions_Check.ahk
 #Include Scripts\Functions.ahk
 
 ; Hotkeys
