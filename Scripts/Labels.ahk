@@ -13,7 +13,7 @@ Run:
 	FootnoteNum := check_footnote_boxes(footnoteArr)
 	if (!DateSelect || !SurnamePos || !FootnoteNum || !WLPos || !PWLPos)
 		return 
-	sleep, 1000
+	sleep, 500
 	WinWait, I Love Automation
 	WinMinimize
 	while(1){

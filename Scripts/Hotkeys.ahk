@@ -1,6 +1,6 @@
 >+o:: ;Test
-	;testing()
-	isMunicipality()
+	testing()
+	;isMunicipality()
 return
 
 Numpad1:: ;19-21
@@ -66,6 +66,9 @@ return
 	
 	sleep, 250
 	MouseClick, left, 236, 399, 1
+return
+
+>^z::Reload
 return
 
 >^x::ExitApp

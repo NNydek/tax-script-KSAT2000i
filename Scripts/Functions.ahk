@@ -1,10 +1,8 @@
-testing(){
-	sleep, 100
-	Send, ^c
-	sleep, 100
-	if (clipboard != "G-PW" . Chr(0321) . "FNPN"){
-		msgbox, RODZAJ NALEZNOSCI !!!
-	}
+testing(){	
+	if(clipboard != "31-12-2021")
+		Send 31-12-2021
+	else
+		msgbox, asdf
 	return
 }
 
@@ -14,7 +12,7 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
 	CoordMode, mouse, Window
 	
-	sleep, 1000
+	sleep, 500
 	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
 	Sleep, 1000
 	Loop{
@@ -38,16 +36,22 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 	} 
 	sleep, 1000
 	MouseClick, left, 757, 617, 1 ; OPERACJE
-	sleep, 1000
+	check_popup(415, 94)
 	MouseClick, left, 411, 124, 1 ; ZMIEN DATE DO
-	sleep, 100
-	Send 31-12-2021
-	sleep, 1000
-	MouseClick, left, 501, 344, 1 ; ZAPISZ (data)
-	sleep, 2000
-	Send, {Enter} ; OK
-	sleep, 1000
-	MouseClick, left, 747, 301, 1 ; ZAPISZ
+	sleep, 200
+	Send, ^c
+	sleep, 200
+	if(clipboard = "31-12-2021")
+		MouseClick, left, 579, 249, 1 ; ANULUJ (data)
+	else{
+		Send 31-12-2021
+		sleep, 500
+		MouseClick, left, 501, 344, 1 ; ZAPISZ (data)	
+		check_popup(480, 485)
+		Send, {Enter} ; OK
+		sleep, 900
+		MouseClick, left, 747, 301, 1 ; ZAPISZ
+	}
 	if (DateSelect >= 2){
 		if(FootnoteNum = 2){
 			sleep, 1000
@@ -62,24 +66,22 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
 		sleep, 1000
 		MouseClick, left, 651, 249, 1 ; ZAZNACZ2
-		sleep, 1000
+		sleep, 200
 		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-		sleep, 1000
+		check_popup(415, 94)
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 1000
 		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
-		sleep, 1000
+		sleep, 200
 		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-		sleep, 1000
+		check_popup(415, 94)
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 1000
 		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
@@ -93,19 +95,18 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		sleep, 1000
 		MouseClick, left, 171, 165, 1 ; DOK. FINANSOWE
 		if(FootnoteNum = 2){
-			sleep, 1000
+			sleep, 200
 			MouseClick, left, 650, 230, 1 ; ZAZNACZ1
 		} else{
-			sleep, 1000
+			sleep, 200
 			MouseClick, left, 650, 270, 1 ; ZAZNACZ3
 		}
 		sleep, 1000
 		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-		sleep, 1000
+		check_popup(415, 94)
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 1000
 		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
@@ -127,11 +128,10 @@ do_GMK_WL(FootnoteNum, WLPos, DateSelect){
 		MouseClick, left, 650, 230, 1 ; ZAZNACZ1
 		sleep, 1000
 		MouseClick, left, 604, 377, 1 ; GENERUJ KOREKTE
-		sleep, 1000
+		check_popup(415, 94)
 		MouseClick, left, 415, 416, 1 ; KOREKTA DO ZERA
 		sleep, 1000
 		MouseClick, left, 484, 470, 1 ; ZATWIERDŹ
-		sleep, 1000
 		check_popup(480, 485) ;480 500
 		Send, {Enter} ; OK
 		sleep, 1000
@@ -149,11 +149,11 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
 	CoordMode, mouse, Window
 	
-	sleep, 1000	
+	sleep, 500	
 	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
 	sleep, 1000
 	Send, {Up 15}
-	Sleep, 350
+	check_popup(370,519)
 	Send, {Enter}
 	sleep, 1000
 	Loop {
@@ -207,32 +207,29 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 	Loop, %DateSelect%{
 		sleep, 1000
 		MouseClick, left, 715, 165, 1 ; OPERACJE
-
-		sleep, 1000
+		check_popup(425, 145)
 		MouseClick, left, 410, 249, 1 ; GENERUJ FAKTURY/DOKUMENTY DLA ZAZN.
-		sleep, 200
-
 		isDead := is_dead(388, 512)
 		if(isDead){
 			sleep, 1000
 			Send, {Enter}
 			sleep, 1000
 			MouseClick, left, 715, 165, 1 ; OPERACJE
-			sleep, 1000
+			check_popup(425, 145)
 			MouseClick, left, 410, 214, 1 ; Generj fakture/dokument
 			sleep, 1000
 			Send, {Enter}
 		}
-		sleep, 1500
+		check_popup(480, 485)
 		Send, {Enter} ; OK
 		sleep, 1000
 		MouseClick, left, 537, 119, 1 ; RODZAJ DOK. FINANSOWEGO
-		sleep, 1500
+		check_popup(480, 485)
 		Send, {Enter} ; OK
 
 		sleep, 1000
 		MouseClick, left, 539, 140, 1 ; REJESTR VAT
-		sleep, 1500
+		check_popup(604, 168)
 		Send, {Enter} ; OK
 		
 		sleep, 1000
@@ -260,7 +257,7 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 			msgbox, Error (do_GMK_PWL default)
 		}
 		if(isDead){
-			sleep, 1000
+			check_popup(475, 470)
 			MouseClick, left, 608, 127, 1 ; Generuj Dokument
 			check_popup(480, 485) ;480 490
 			sleep, 1000
@@ -272,7 +269,7 @@ do_GMK_PWL(DateSelect, SurnamePos, PWLPos){
 			sleep, 500
 			send, {Enter}
 		} else{
-			sleep, 1000
+			check_popup(475, 470)
 			MouseClick, left, 608, 127, 1 ; Generuj Dokument
 			
 			check_popup(480, 470) ;480 490
@@ -304,19 +301,18 @@ return
 }
 
 do_FAKTUROWANIE(){
-	sleep, 500
+	sleep, 200
 	if !WinActive("FAKTUROWANIE")
 		WinActivate FAKTUROWANIE
 	CoordMode, mouse, Window
 
-	sleep, 1000
+	sleep, 500
 	MouseClick, left, 94, 414, 1 ; KOD
 	sleep, 200
 	Send, ^v
 	sleep, 1000
 	Send, {F8}
-	
-	sleep, 2000
+	check_popup_fakturowanie(125, 217)
 	MouseClick, left, 757, 218, 1 ; Zaznacz1
 
 	sleep, 200
@@ -327,30 +323,31 @@ do_FAKTUROWANIE(){
 
 	sleep, 500
 	MouseClick, left, 716, 502, 1 ; Przeslij do NZ
-
-	sleep, 1000
+	check_popup(485, 135)
 	MouseClick, left, 318, 163, 1 ; JED, RD i TOK - z faktury
-	sleep, 2000
+	check_popup(480, 485)
 	Send, {Enter}
 	
-	sleep, 1000
+	sleep, 200
 	MouseClick, left, 649, 353, 1 ; Kalendarz
-	sleep, 1500
+	check_popup(410, 415)
 	Send, {Enter}
 	
-	sleep, 1000
+	sleep, 400
 	MouseClick, left, 624, 424, 1 ; Zatwierdź
-	
-	check_popup(480, 490)
-	sleep, 1000
+	sleep, 350
+	check_popup(480, 479)
 	Send, {Enter}
-	check_popup(480, 490)
-	sleep, 1000
+	sleep, 350
+	check_popup(480, 480)
+	sleep, 350
 	Send, {Enter}
+	check_popup(98, 423)
 	sleep, 3000
 	Send, {Enter}
-	
-	sleep, 4000
+	sleep, 3000
+	;check_popup(480, 480)
+	;check_popup(390, 217)
 	MouseClick, left, 97, 217, 1 ; NR REJESTRU
 	sleep, 200
 	Send {F7}
@@ -368,7 +365,7 @@ update_excel(){
 	
 	for xlCell in oWorkbook.Sheets(1).UsedRange.Cells{
 		c1 := Chr(65) ; ASCII to String - A
-		c2 := Chr(71) ; 67 - C    71 - G
+		c2 := Chr(72) ; 67 - C    72 - H
 		cell = %c1%%row%:%c2%%row% ; e.g. A2:G2
 		if(oWorkbook.Sheets(1).Range(cell).Interior.Color != 16777215.0000000){
 			row++

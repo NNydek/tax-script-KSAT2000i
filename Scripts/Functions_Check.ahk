@@ -106,7 +106,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect){
 		PWL = %PWLPos%
 		sleep, 100
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != PWL){
-			msgbox,,, Wrong PWL, 2
+			msgbox,,, Wrong PWL, 1
 			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
 			GuiControl,, PWL_%correctValue%, 1
 			return 0
@@ -116,7 +116,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect){
 		SRNPos = %SurnamePos%
 		sleep, 100
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != SRNPos){
-			msgbox,,, Wrong SURNAME, 2
+			msgbox,,, Wrong SURNAME, 1
 			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
 			GuiControl,, %correctValue%_Surname_Pos, 1			
 			return 0
@@ -126,7 +126,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect){
 		WL = %WLPos%
 		sleep, 100
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != WL || WL = PWL){
-			msgbox,,, Wrong WL, 2
+			msgbox,,, Wrong WL, 1
 			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
 			GuiControl,, WL_%correctValue%, 1			
 			return 0
@@ -135,7 +135,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect){
 		newCell = G%row%
 		FNPos = %FootnoteNum%
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != FNPos){
-			msgbox,,, Wrong FOOTNOTE, 2
+			msgbox,,, Wrong FOOTNOTE, 1
 			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
 			GuiControl,, %correctValue%_footnote, 1
 			return 0
@@ -144,7 +144,7 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect){
 		newCell = H%row%
 		DSelect = %DateSelect%
 		if(Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value) != DSelect){
-			msgbox,,, Wrong DATESELECT, 2
+			msgbox,,, Wrong DATESELECT, 1
 			correctValue := Format("{:.0f}",oWorkbook.Sheets(1).Range(newCell).Value)
 			GuiControl,, %correctValue%_dates, 1
 			return 0
@@ -157,13 +157,24 @@ check_parameters(PWLPos, SurnamePos, WLPos, FootnoteNum, DateSelect){
 
 
 check_popup(getPixelX, getPixelY){
-	Loop, 15{
-		sleep 1000
+	Loop, 60{
+		sleep 250
 		PixelGetColor, color, getPixelX, getPixelY
-		if(color = 0x0000FF || color = 0xD1B499 || color = 0x00FFFF || color = 0xFF0000 || color = 0x7F7F00)
+		if(color = 0x0000FF || color = 0xD1B499 || color = 0x00FFFF || color = 0xFF0000 || color = 0x7F7F00 || color = 0xE0E000 || 0xD1B499)
 			return 1
 	}
 	msgbox, Something went wrong (check_popup)
+	return 0
+}
+
+check_popup_fakturowanie(getPixelX, getPixelY){
+	Loop, 60{
+		sleep 250
+		PixelGetColor, color, getPixelX, getPixelY
+		if(color = 0x000000)
+			return 1
+	}
+	msgbox, Something went wrong (check_popup_fakturowanie)
 	return 0
 }
 
@@ -201,13 +212,13 @@ check_new_code(){
 isAlreadyDone(PWLPos){
 	if !WinActive("GOSPODARKA MIENIEM KOMUNALNYM")
 		WinActivate GOSPODARKA MIENIEM KOMUNALNYM
-	sleep, 1000
-	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
-	sleep, 1000
-	Send, {Up 9}
-	Sleep, 1000
-	Send, {Enter}
 	sleep, 500
+	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
+	sleep, 500
+	Send, {Up 9}
+	check_popup(370,519)
+	Send, {Enter}
+	sleep, 400
 	Loop {
 		if(A_Index = 1)
 			continue
@@ -229,17 +240,18 @@ isAlreadyDone(PWLPos){
 	MouseClick, left, 58, 222, 1 ; NUMER UMOWY ZAZN. 1
 	sleep, 1000
 		Send, {Up 15}
-	sleep, 1000
+	check_popup(370,519)
 		Send, {Enter}
 	return
 }
+
 isMunicipality(){
 	sleep, 100
 	MouseClick, left, 240, 235
-	sleep, 100
+	sleep, 250
 	Send, ^c
 	sleep, 100
-	if (RegExMatch(clipboard,"G-PW" . Chr(0321)) = 1 || RegExMatch(clipboard,"G-W" . Chr(0321)) = 1)
+	if (RegExMatch(clipboard,"G-PW" . Chr(0321) . "FN") = 1 || RegExMatch(clipboard,"G-W" . Chr(0321) . "FN") = 1)
 		return
 	else
 		msgbox, RODZAJ NALEZNOSCI !!!
