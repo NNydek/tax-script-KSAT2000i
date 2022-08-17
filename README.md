@@ -24,12 +24,11 @@ Computer does about 90% of work for me. All I have to do is analyse contrahent's
   
 ## Conclusion
 <p align="justify">
-It was my first time using a scripting language and I'm happy with the end result. Code might be a little messy here and there, but it's something I'm looking to improve upon and educate myself more  
-  
-I've used <b>AutoHotkey</b> due to it's simplicity, ability to make a portable version without a need of standard installation process and how straight forward documentation was, with many online topics. It's definitely not my last ride with this language.  
-  
-It was also an opportunity to use a new source code editor <b>Notepad++</b>. I didn't dig much into it, but customization capabilities were very nice and I'll most likely start using it instead of traditional OS notepads.
-</p>
+It was my first time using a scripting language and I'm happy with the end result. Code might be a little messy here and there, but it's something I'm looking to improve upon and educate myself more</p>  
+<p align="justify">  
+I've used <b>AutoHotkey</b> due to it's simplicity, ability to make a portable version without a need of standard installation process and how straight forward documentation was, with many online topics. It's definitely not my last ride with this language.</p>  
+<p align="justify">  
+It was also an opportunity to use a new source code editor <b>Notepad++</b>. I didn't dig much into it, but customization capabilities were very nice and I'll most likely start using it instead of traditional OS notepads.</p>
 
 ## Keybindings
 
