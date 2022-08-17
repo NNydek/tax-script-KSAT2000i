@@ -23,3 +23,20 @@ I've used **AutoHotkey** due to it's simplicity, ability to make a portable vers
   
 It was also an opportunity to use a new source code editor **Notepad++**. I didn't dig much into it, but customization capabilities were very nice and I'll most likely start using it instead of traditional OS notepads.
 
+## Keybindings
+
+| Key | Description |
+| --- | --- |
+| `Numpad1` | Mark contrahent by 2019-2021 |
+| `Numpad2` | Mark contrahent by 2020-2021 |
+| `Numpad3` | Mark contrahent by 2021 |
+| `Numpad4` | Mark contrahent as a special case |
+| `Numpad7` | Go back to first worksheet in Excel |
+| `Numpad8` | Enter a new code to KSAT2020i |
+| `r_ctrl+p` | Pause/Resume |
+| `r_ctrl+c` | Clear window from any contrahents |
+| `r_ctrl+z` | Reload application |
+| `r_ctrl+x` | Close app entirely |
+| `\` | Go to contrahent's "Record" |
+| `]` | Go to contrahent's "Account" |
+| `[` | Exit from contrahent's "Account" |
