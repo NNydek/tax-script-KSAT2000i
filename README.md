@@ -47,4 +47,4 @@ It was also an opportunity to use a new source code editor <b>Notepad++</b>. I d
 | `\` | Go to contrahent's "Record" |
 | `]` | Go to contrahent's "Account" |
 | `[` | Exit from contrahent's "Account" |
-| r_shift+o | Used for testing |
+| `r_shift+o` | Used for testing |
